@@ -1,0 +1,22 @@
+- hosts: deep_learning
+  become: true
+  vars:
+    digits_deb_url: http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1404/x86_64/digits_4.0.0-1_amd64.deb
+    digits_deb_name: digits_4.0.0-1_amd64.deb
+   
+  tasks:
+    - name: Check if digits is installed
+      command: dpkg-query -W "{{ digits_deb_name }}"
+      register: digits_deb
+      failed_when: digits_deb.rc > 1
+      changed_when: digits_deb.rc == 1
+  
+    - name: Download digits
+      get_url: url="{{ digits_deb_url }}" dest="/tmp/{{ digits_deb_name }}"
+      when: digits_deb.rc == 1
+  
+    - name: install required packages
+      become: true
+      apt: update_cache=yes  force=yes
+      when: digits_deb.rc == 1
+      

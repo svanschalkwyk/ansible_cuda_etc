@@ -1,0 +1,18 @@
+- hosts: deep_learning
+  become: true
+  vars:
+    - gpu: True
+    - cuda_restart_node_on_install: False
+    - cuda_init: True
+    - cuda_init_restart_service: False    
+    - cuda_packages:
+      - cuda
+      - cuda-repo-ubuntu1604
+  roles:
+    - CSC-IT-Center-for-Science.cuda
+  tasks:
+    - copy: content="/usr/local/cuda/lib64" dest="/etc/ld.so.conf.d/cuda.conf"
+    - command: ldconfig
+    
+    
+  

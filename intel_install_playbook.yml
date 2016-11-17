@@ -1,0 +1,14 @@
+- hosts: deep_learning
+  become: true
+   
+  tasks:
+    - synchronize: src="/home/steph/Downloads/Intel" dest="/tmp/"
+    - copy: src="/home/steph/Downloads/Intel/silent.cfg" dest="/tmp/Intel/"
+
+    - find: paths="/tmp/Intel" file_type=directory
+      register: dirs
+    - debug: var=dirs.files verbosity=2       
+    
+    - shell: "cd '{{ item.path }}' && ./install.sh --silent=../silent.cfg && cd /tmp/Intel"
+      with_items: 
+        - "{{ dirs.files }}" 

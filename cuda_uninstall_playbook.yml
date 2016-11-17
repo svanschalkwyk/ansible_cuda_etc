@@ -1,0 +1,14 @@
+---
+- hosts: deep_learning
+  become: true
+
+  tasks:
+  - name: uninstall cuda
+    apt:
+      name: cuda*
+      state: absent
+   
+  - name: uninstall libcuda
+    apt:
+      name: libcuda*
+      state: absent
